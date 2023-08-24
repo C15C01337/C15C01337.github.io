@@ -5,45 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Countdown Timer</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    
-    .event-box {
-      border: 2px solid #3498db;
-      padding: 20px;
-      margin: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      background-color: #f5f5f5;
-    }
+body {
+  font-family: Arial, sans-serif;
+}
 
-    .event-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #3498db;
-    }
+.event-box {
+  border: 2px solid #3498db;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background-color: #f5f5f5;
+}
 
-    .clock-container {
-      text-align: center;
-    }
+.event-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: blue;
+  
+}
 
-    #clockdiv {
-      display: flex;
-      justify-content: center;
-    }
+.clock-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin: 20px;
+}
 
-    #clockdiv > div {
-      margin: 0 20px;
-      font-size: 30px;
-    }
+#clockdiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
 
-    .smalltext {
-      font-size: 16px;
-      color: #555;
-    }
-  </style>
+#clockdiv > div {
+  margin: 0 20px;
+  font-size: 30px;
+  color: #E26044;
+}
+
+.smalltext {
+  font-size: 16px;
+  color: #555;
+}
+
+
+.eventDetails {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  color: #0D6C99;
+  
+}
+
+</style>
+
 </head>
 <body>
   <div id="painter"></div>
@@ -87,8 +112,7 @@ const getUITemplate = ({ title, days, hours, minutes, seconds, msg }) => {
                     <div class="smalltext">Seconds</div>
                 </div>
             </div>
-
-            
+          </div>
         `;
 };
 
