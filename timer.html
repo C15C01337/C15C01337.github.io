@@ -8,12 +8,16 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-image: url('newanime.webp'); /* Replace with the actual path to your image */
+  background-image: url('final-anime.png'); /* Replace with the actual path to your image */
   background-repeat: no-repeat;
   background-attachment: fixed;
+  background-position: center;
   background-position: left;
-  display: flex; /* Use flexbox for layout */
+  display: flex;
+  justify-items: center;
   position: relative;
+
+  
 }
 
 .event-box {
@@ -84,6 +88,13 @@ body {
   color: #0D6C99;
   
 }
+
+@media screen and (max-width: 768px) {
+      .clock-container {
+        margin: 10px;
+        padding: 10px;
+      }
+    }
 
 </style>
 
