@@ -5,8 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Countdown Timer</title>
   <style>
+
 body {
   font-family: Arial, sans-serif;
+  background-image: url('newanime.webp'); /* Replace with the actual path to your image */
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: left;
+  display: flex; /* Use flexbox for layout */
+  position: relative;
 }
 
 .event-box {
@@ -39,6 +46,18 @@ body {
   margin: 20px;
 }
 
+#painter {
+      position: absolute;
+      top: 80%;
+      right: 1.3%;
+      {% comment %} transform: translateY(-10%); {% endcomment %}
+      width: 750px;
+      align-items: center;
+      justify-content:center;
+      padding-top:45px;
+
+}
+
 #clockdiv {
   display: flex;
   justify-content: center;
@@ -59,7 +78,6 @@ body {
   font-size: 16px;
   color: #555;
 }
-
 
 .eventDetails {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
