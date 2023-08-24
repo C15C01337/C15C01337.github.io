@@ -1,13 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Countdown Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    
+    .event-box {
+      border: 2px solid #3498db;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      background-color: #f5f5f5;
+    }
+
+    .event-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #3498db;
+    }
+
+    .clock-container {
+      text-align: center;
+    }
+
+    #clockdiv {
+      display: flex;
+      justify-content: center;
+    }
+
+    #clockdiv > div {
+      margin: 0 20px;
+      font-size: 30px;
+    }
+
+    .smalltext {
+      font-size: 16px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div id="painter"></div>
+
+  <script>
+
 let deadlinesWithInfo = [
   {
     time: new Date("August 25, 2023 21:45:00"),
-    msg: "CTF Start Date",
-    title: "Sekai CTF 2023",
+    title: "Start of Sekai CTF"
   },
   {
-    time: new Date("April 27, 2023 21:45:00"),
-    msg: "CTF End Date",
-    title: "Sekai CTF 2023",
+    time: new Date("August 27, 2023 21:45:00"),
+    title: "End of Sekai CTF"
   }
 ];
 
@@ -38,9 +88,7 @@ const getUITemplate = ({ title, days, hours, minutes, seconds, msg }) => {
                 </div>
             </div>
 
-            <!-- message text -->
-            <p id="demo">${msg}</p>
-        </div>
+            
         `;
 };
 
@@ -52,9 +100,10 @@ const getRemainingTime = (deadline) => {
   let minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
   let seconds = Math.floor((t % (1000 * 60)) / 1000);
 
-  obj = { days, hours, minutes, seconds };
+  let obj = { days, hours, minutes, seconds };  // Added 'let' before 'obj'
   return obj;
 };
+
 
 const handleCountDown = () => {
   let timerInfo = [];
@@ -74,3 +123,7 @@ const handleCountDown = () => {
 };
 
 setInterval(() => handleCountDown(), 1000);
+  
+  </script>
+</body>
+</html>
