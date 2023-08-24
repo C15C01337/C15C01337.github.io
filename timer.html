@@ -1,0 +1,76 @@
+let deadlinesWithInfo = [
+  {
+    time: new Date("August 25, 2023 21:45:00"),
+    msg: "CTF Start Date",
+    title: "Sekai CTF 2023",
+  },
+  {
+    time: new Date("April 27, 2023 21:45:00"),
+    msg: "CTF End Date",
+    title: "Sekai CTF 2023",
+  }
+];
+
+const getUITemplate = ({ title, days, hours, minutes, seconds, msg }) => {
+  return `
+        <div class="clock-container">
+            <div> 
+                <span class="eventDetails"> 
+                <h1><b>${title} 2023</b></h1></span>
+            </div>
+            <h1>Countdown Clock</h1>
+            <div id="clockdiv">
+                <div>
+                    <span class="days">${days}</span>
+                    <div class="smalltext">Days</div>
+                </div>
+                <div>
+                    <span class="hours">${hours}</span>
+                    <div class="smalltext">Hours</div>
+                </div>
+                <div>
+                    <span class="minutes">${minutes}</span>
+                    <div class="smalltext">Minutes</div>
+                </div>
+                <div>
+                    <span class="seconds">${seconds}</span>
+                    <div class="smalltext">Seconds</div>
+                </div>
+            </div>
+
+            <!-- message text -->
+            <p id="demo">${msg}</p>
+        </div>
+        `;
+};
+
+const getRemainingTime = (deadline) => {
+  let now = new Date().getTime();
+  let t = deadline - now;
+  let days = Math.floor(t / (1000 * 60 * 60 * 24));
+  let hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  let minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+  let seconds = Math.floor((t % (1000 * 60)) / 1000);
+
+  obj = { days, hours, minutes, seconds };
+  return obj;
+};
+
+const handleCountDown = () => {
+  let timerInfo = [];
+
+  deadlinesWithInfo.map((deadline) =>
+    timerInfo.push({
+      ...getRemainingTime(deadline.time),
+      msg: deadline.msg,
+      title: deadline.title,
+    })
+  );
+
+  let domContent = "";
+
+  timerInfo.forEach((timeInfo) => (domContent += getUITemplate(timeInfo)));
+  document.getElementById("painter").innerHTML = domContent;
+};
+
+setInterval(() => handleCountDown(), 1000);
