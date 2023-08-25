@@ -51,16 +51,20 @@ body {
 }
 
 #painter {
-      position: absolute;
-      top: 80%;
       right: 1.3%;
-      {% comment %} transform: translateY(-10%); {% endcomment %}
+      transform: translateY(-10%);
       width: 750px;
       align-items: center;
       justify-content:center;
       padding-top:45px;
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      margin: 100px 0px;
+      margin-left: auto;
 
 }
+
+
 
 #clockdiv {
   display: flex;
@@ -103,7 +107,13 @@ body {
   <div id="painter"></div>
 
   <script>
-
+window.addEventListener("DOMContentLoaded",()=>{
+  var music = document.createElement('audio');
+  music.src = './music/a.mp3';
+  document.body.appendChild(music);
+  music.loop = true;
+  music.play()
+})
 let deadlinesWithInfo = [
   {
     time: new Date("August 25, 2023 21:45:00"),
