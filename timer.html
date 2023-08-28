@@ -107,21 +107,30 @@ body {
   <div id="painter"></div>
 
   <script>
-window.addEventListener("DOMContentLoaded",()=>{
-  var music = document.createElement('audio');
-  music.src = './music/a.mp3';
-  document.body.appendChild(music);
-  music.loop = true;
-  music.play()
-})
+window.addEventListener("DOMContentLoaded", () => {
+    let music;
+    let hasStarted = false;
+
+    window.addEventListener("mouseover", () => {
+        if (!hasStarted) {
+            music = document.createElement('audio');
+            music.src = './music/a.mp3';
+            document.body.appendChild(music);
+            music.loop = true;
+            music.play();
+            hasStarted = true;
+        }
+    });
+});
+
 let deadlinesWithInfo = [
   {
-    time: new Date("August 25, 2023 21:45:00"),
-    title: "Start of Sekai CTF"
+    time: new Date("September 1, 2023 15:15:00"),
+    title: "Start of DownUnderCTF"
   },
   {
-    time: new Date("August 27, 2023 21:45:00"),
-    title: "End of Sekai CTF"
+    time: new Date("September 3, 2023 15:15:00"),
+    title: "End of DownUnderCTF"
   }
 ];
 
