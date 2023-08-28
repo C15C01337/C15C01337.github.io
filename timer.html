@@ -108,20 +108,21 @@ body {
 
   <script>
 window.addEventListener("DOMContentLoaded", () => {
-    let music;
-    let hasStarted = false;
+  var music = document.createElement('audio');
+  music.src = './music/a.mp3';
+  document.body.appendChild(music);
+  music.loop = true;
 
-    window.addEventListener("mouseover", () => {
-        if (!hasStarted) {
-            music = document.createElement('audio');
-            music.src = './music/a.mp3';
-            document.body.appendChild(music);
-            music.loop = true;
-            music.play();
-            hasStarted = true;
-        }
+  // Play the music when mouse hovers over the document body
+  document.body.addEventListener('mouseover', () => {
+    // Ensuring it plays only once if already playing
+    if (!music.paused) return;
+    music.play().catch(error => {
+      console.error("Error playing the audio:", error);
     });
+  });
 });
+
 
 let deadlinesWithInfo = [
   {
