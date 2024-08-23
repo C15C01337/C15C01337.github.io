@@ -1,80 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Landing Page With Light/Dark Mode</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <main>
-      <div class="big-wrapper light">
-        <img src="./img/shape.png" alt="" class="shape" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Countdown Timer with Dark Mode</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('final-anime.png'); /* Replace with your image */
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center left;
+      display: flex;
+      justify-items: center;
+      position: relative;
+      background-size: cover;
+    }
 
-        <header>
-          <div class="container">
-            <div class="logo">
-              <img src="./img/logo.png" alt="Logo" />
-              <h3>n0de in a new branch</h3>
+    /* Light mode styles */
+    .clock-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background-color: rgba(245, 245, 245, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      margin: 20px;
+    }
+
+    #painter {
+      right: 1.3%;
+      transform: translateY(-10%);
+      width: 750px;
+      align-items: center;
+      justify-content: center;
+      padding-top: 45px;
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      margin: 100px 0;
+      margin-left: auto;
+    }
+
+    #clockdiv {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+      animation: pulse 2s infinite;
+    }
+
+    #clockdiv > div {
+      margin: 0 20px;
+      font-size: 30px;
+      color: #E26044;
+      transition: color 0.5s ease;
+    }
+
+    .smalltext {
+      font-size: 16px;
+      color: #555;
+    }
+
+    .eventDetails {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      color: #0D6C99;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    @media screen and (max-width: 768px) {
+      .clock-container {
+        margin: 10px;
+        padding: 10px;
+      }
+    }
+
+    /* Dark mode styles */
+    body.dark-mode {
+      background-color: #121212;
+      background-image: none; /* Optional: Remove background image for dark mode */
+      color: #ffffff;
+    }
+
+    .dark-mode .clock-container {
+      background-color: rgba(50, 50, 50, 0.9);
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    .dark-mode #clockdiv {
+      background-color: rgba(40, 40, 40, 0.9);
+    }
+
+    .dark-mode #clockdiv > div {
+      color: #E26044; /* Or a lighter color for better visibility */
+    }
+
+    .dark-mode .smalltext {
+      color: #bbbbbb;
+    }
+
+    /* Keyframes for animations */
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Dark Mode Toggle Button */
+    .toggle-dark-mode {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #f0f0f0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .dark-mode .toggle-dark-mode {
+      background-color: #333;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-dark-mode">Toggle Dark Mode</button>
+  <div id="painter"></div>
+
+  <script>
+    // Toggle Dark Mode
+    const toggleButton = document.querySelector('.toggle-dark-mode');
+    toggleButton.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+
+    let deadlinesWithInfo = [
+      {
+        time: new Date("August 23, 2024 21:45:00"),
+        title: "Start of Sekai CTF",
+        msg: "The event has started!"
+      },
+      {
+        time: new Date("August 25, 2024 21:45:00"),
+        title: "End of Sekai CTF",
+        msg: "The event has ended!"
+      }
+    ];
+
+    const getUITemplate = ({ title, days, hours, minutes, seconds, msg, isExpired }) => {
+      if (isExpired) {
+        return `
+          <div class="clock-container">
+            <div>
+              <span class="eventDetails"><h1>${title}</h1></span>
+              <h2>${msg}</h2>
             </div>
-
-            <div class="links">
-              <ul>
-                <li><a href="#">Project</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Testimonials</a></li>
-                <li><a href="timer" class="btn">CTF Timer</a></li>
-              </ul>
+          </div>`;
+      } else {
+        return `
+          <div class="clock-container">
+            <div> 
+              <span class="eventDetails">
+                <h1><b>${title} 2024 </b></h1>
+              </span>
             </div>
-
-            <div class="overlay"></div>
-
-            <div class="hamburger-menu">
-              <div class="bar"></div>
-            </div>
-          </div>
-        </header>
-
-        <div class="showcase-area">
-          <div class="container">
-            <div class="left">
-          <div class="big-title">
-            <h1>Welcome to Node Zero,</h1>
-            <h1>Your Gateway to Web Security & Cryptography.</h1>
-          </div>
-          <p class="text">
-            In an age where information is power, protecting your data is critical. At Node Zero, we equip you with the knowledge to secure your digital world. 
-          </p>
-          <p class="text">
-            Learn how to safeguard your applications with cutting-edge encryption techniques, and dive deep into the world of cryptography, where secrets are kept safe and vulnerabilities are exposed before they become threats.
-          </p>
-
-              <div class="cta">
-                <a href="#" class="btn">Get started</a>
+            <h1>Countdown Clock</h1>
+            <div id="clockdiv">
+              <div>
+                <span class="days">${days}</span>
+                <div class="smalltext">Days</div>
+              </div>
+              <div>
+                <span class="hours">${hours}</span>
+                <div class="smalltext">Hours</div>
+              </div>
+              <div>
+                <span class="minutes">${minutes}</span>
+                <div class="smalltext">Minutes</div>
+              </div>
+              <div>
+                <span class="seconds">${seconds}</span>
+                <div class="smalltext">Seconds</div>
               </div>
             </div>
+          </div>`;
+      }
+    };
 
-            <div class="right">
-              <img src="./img/person.png" alt="Person Image" class="person" />
-            </div>
-          </div>
-        </div>
+    const getRemainingTime = (deadline) => {
+      let now = new Date().getTime();
+      let t = deadline - now;
 
-        <div class="bottom-area">
-          <div class="container">
-            <button class="toggle-btn">
-              <i class="far fa-moon"></i>
-              <i class="far fa-sun"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </main>
+      if (t <= 0) {
+        return { days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true };
+      }
 
-    <!-- JavaScript Files -->
+      let days = Math.floor(t / (1000 * 60 * 60 * 24));
+      let hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      let minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+      let seconds = Math.floor((t % (1000 * 60)) / 1000);
 
-    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
-    <script src="./app.js"></script>
-  </body>
+      return { days, hours, minutes, seconds, isExpired: false };
+    };
+
+    const handleCountDown = () => {
+      let domContent = "";
+
+      deadlinesWithInfo.forEach((deadline) => {
+        let timeInfo = getRemainingTime(deadline.time);
+
+        if (timeInfo.isExpired && deadline.title === "End of Sekai CTF") {
+          timeInfo.msg = deadline.msg;
+        }
+
+        domContent += getUITemplate({
+          ...timeInfo,
+          title: deadline.title,
+          msg: deadline.msg,
+        });
+      });
+
+      document.getElementById("painter").innerHTML = domContent;
+    };
+
+    let intervalId = setInterval(() => {
+      handleCountDown();
+    });
+  </script>
+</body>
 </html>
