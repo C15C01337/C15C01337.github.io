@@ -12,19 +12,24 @@
             color: #abb2bf;
             margin: 0;
             padding: 0;
+            position: relative;
         }
         h1, h2 {
             color: #61afef;
             text-align: center;
+        }
+        .container {
+            position: relative;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 800px;
         }
         .terminal {
             border: 1px solid #61afef;
             border-radius: 5px;
             background-color: #1e2127;
             padding: 20px;
-            margin: 20px auto;
-            width: 80%;
-            max-width: 800px;
+            margin: 20px 0;
             box-shadow: 0 0 10px rgba(0,0,0,0.5);
             position: relative;
         }
@@ -59,9 +64,70 @@
             padding: 10px;
             margin-top: 10px;
         }
+        .link {
+            color: #61afef;
+            text-decoration: none;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        .tip {
+            position: absolute;
+            background-color: #1e2127;
+            color: #abb2bf;
+            border: 1px solid #61afef;
+            border-radius: 5px;
+            padding: 10px;
+            width: 200px;
+        }
+        .tip-left {
+            left: -220px;
+            top: 20px;
+            transform: translateX(-100%);
+        }
+        .tip-right {
+            right: -220px;
+            top: 20px;
+            transform: translateX(100%);
+        }
+         .code-container {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 5px;
+            padding: 15px;
+            overflow-x: auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        pre {
+            margin: 0;
+        }
+        code {
+            display: block;
+            white-space: pre-wrap; /* Preserve formatting */
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .code-highlight {
+            color: #9cdcfe; /* Color for keywords */
+        }
     </style>
     <script>
-        // Initialize SageMath cells
+
+        // Function to load state from the URL
+        function loadState() {
+            const url = new URL(window.location);
+            const encodedValue = url.searchParams.get('factorial');
+            if (encodedValue) {
+                const factorialValue = decodeURIComponent(encodedValue);
+                document.querySelector('input[name="a"]').value = factorialValue;
+                // Trigger calculation
+                document.querySelector('.sagecell-button').click();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            loadState();
+        });
+
         sagecell.makeSagecell({
             inputLocation: '#mycell',
             template: sagecell.templates.minimal,
@@ -71,6 +137,7 @@
                 outputDiv.className = 'sagecell-output';
                 outputDiv.innerHTML = result;
                 document.querySelector('#mycell').appendChild(outputDiv);
+                saveState(); // Save state after computation
             }
         });
 
@@ -90,30 +157,49 @@
 <body>
     <h1>SageMath Terminal Interface</h1>
 
-    <div class="terminal">
-        <h2>Factorial Calculator</h2>
-        <p>Use the input field below to calculate factorials. Click the “Activate” button to see the result.</p>
-        <div id="mycell">
-            <script type="text/x-sage">
+    <div class="container">
+
+        <div class="tip tip-right">
+            <h3>Tip (Right)</h3>
+                    <div class="code-container">
+        <pre><code>
+<span class="code-highlight">n</span> = <span class="code-highlight">p</span> * <span class="code-highlight">q</span>
+<span class="code-highlight">e</span> = 65537
+<span class="code-highlight">phi</span> = (<span class="code-highlight">p</span> - 1) * (<span class="code-highlight">q</span> - 1)
+<span class="code-highlight">d</span> = pow(<span class="code-highlight">e</span>, -1, <span class="code-highlight">phi</span>)
+<span class="code-highlight">m</span> = pow(<span class="code-highlight">ct</span>, <span class="code-highlight">d</span>, <span class="code-highlight">n</span>)
+<span class="code-highlight">flag</span> = int(<span class="code-highlight">m</span>).to_bytes((int(<span class="code-highlight">m</span>).bit_length() + 1) // 8, "big")
+print(<span class="code-highlight">flag</span>)
+        </code></pre>
+    </div>
+    
+        </div>
+
+        <div class="terminal">
+            <h2>Factorial Calculator</h2>
+            <p>Use the input field below to calculate factorials. </p>
+            <div id="mycell">
+                <script type="text/x-sage">
 @interact
 def factorial_calculator(a=(1, 100)):
     print(factorial(a))
-            </script>
-        </div>
-    </div>
+                </script>
+            </div>
+            </div>
 
-    <div class="terminal">
-        <h2>Your Own Computations</h2>
-        <p>Type your own Sage computation below and click “Evaluate” to see the result.</p>
-        <div class="compute">
-            <script type="text/x-sage">plot(sin(x), (x, 0, 2*pi))</script>
-        </div>
-        <div class="compute">
-            <script type="text/x-sage">
+        <div class="terminal">
+            <h2>Your Own Computations</h2>
+            <p>Type your own Sage computation below and click “Evaluate” to see the result.</p>
+            <div class="compute">
+                <script type="text/x-sage">plot(sin(x), (x, 0, 2*pi))</script>
+            </div>
+            <div class="compute">
+                <script type="text/x-sage">
 @interact
 def f(n=(0,10)):
     print(2^n)
-            </script>
+                </script>
+            </div>
         </div>
     </div>
 </body>
