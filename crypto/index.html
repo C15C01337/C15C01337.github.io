@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>SageMath Terminal Interface</title>
+    <script src="https://sagecell.sagemath.org/static/embedded_sagecell.js"></script>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: #282c34;
+            color: #abb2bf;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2 {
+            color: #61afef;
+            text-align: center;
+        }
+        .terminal {
+            border: 1px solid #61afef;
+            border-radius: 5px;
+            background-color: #1e2127;
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .compute {
+            margin: 10px 0;
+        }
+        .sagecell-button {
+            background-color: #98c379;
+            color: #282c34;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .sagecell-button:hover {
+            background-color: #82aaff;
+        }
+        .sagecell-output {
+            color: #c678dd;
+            padding: 10px;
+            border: 1px solid #61afef;
+            border-radius: 5px;
+            background-color: #1e2127;
+            margin-top: 10px;
+        }
+        .sagecell-input {
+            color: #e06c75;
+            border: 1px solid #61afef;
+            border-radius: 5px;
+            background-color: #1e2127;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        // Make the div with id 'mycell' a Sage cell
+        sagecell.makeSagecell({
+            inputLocation: '#mycell',
+            template: sagecell.templates.minimal,
+            evalButtonText: 'Activate',
+            onSuccess: function(result) {
+                var outputDiv = document.createElement('div');
+                outputDiv.className = 'sagecell-output';
+                outputDiv.innerHTML = result;
+                document.querySelector('#mycell').appendChild(outputDiv);
+            }
+        });
+
+        // Make *any* div with class 'compute' a Sage cell
+        sagecell.makeSagecell({
+            inputLocation: 'div.compute',
+            evalButtonText: 'Evaluate',
+            onSuccess: function(result) {
+                var outputDiv = document.createElement('div');
+                outputDiv.className = 'sagecell-output';
+                outputDiv.innerHTML = result;
+                var computeDiv = this.inputLocation;
+                computeDiv.appendChild(outputDiv);
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>SageMath Terminal Interface</h1>
+
+    <div class="terminal">
+        <h2>Factorial</h2>
+        Click the “Activate” button below to calculate factorials.
+        <div id="mycell">
+            <script type="text/x-sage">
+@interact
+def _(a=(1, 10)):
+    print(factorial(a))
+            </script>
+        </div>
+    </div>
+
+    <div class="terminal">
+        <h2>Your own computations</h2>
+        Type your own Sage computation below and click “Evaluate”.
+        <div class="compute">
+            <script type="text/x-sage">plot(sin(x), (x, 0, 2*pi))</script>
+        </div>
+        <div class="compute">
+            <script type="text/x-sage">
+@interact
+def f(n=(0,10)):
+    print(2^n)
+            </script>
+        </div>
+    </div>
+</body>
+</html>
