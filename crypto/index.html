@@ -26,6 +26,7 @@
             width: 80%;
             max-width: 800px;
             box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            position: relative;
         }
         .compute {
             margin: 10px 0;
@@ -60,7 +61,7 @@
         }
     </style>
     <script>
-        // Make the div with id 'mycell' a Sage cell
+        // Initialize SageMath cells
         sagecell.makeSagecell({
             inputLocation: '#mycell',
             template: sagecell.templates.minimal,
@@ -73,7 +74,6 @@
             }
         });
 
-        // Make *any* div with class 'compute' a Sage cell
         sagecell.makeSagecell({
             inputLocation: 'div.compute',
             evalButtonText: 'Evaluate',
@@ -91,20 +91,20 @@
     <h1>SageMath Terminal Interface</h1>
 
     <div class="terminal">
-        <h2>Factorial</h2>
-        Click the “Activate” button below to calculate factorials.
+        <h2>Factorial Calculator</h2>
+        <p>Use the input field below to calculate factorials. Click the “Activate” button to see the result.</p>
         <div id="mycell">
             <script type="text/x-sage">
 @interact
-def _(a=(1, 10)):
+def factorial_calculator(a=(1, 100)):
     print(factorial(a))
             </script>
         </div>
     </div>
 
     <div class="terminal">
-        <h2>Your own computations</h2>
-        Type your own Sage computation below and click “Evaluate”.
+        <h2>Your Own Computations</h2>
+        <p>Type your own Sage computation below and click “Evaluate” to see the result.</p>
         <div class="compute">
             <script type="text/x-sage">plot(sin(x), (x, 0, 2*pi))</script>
         </div>
