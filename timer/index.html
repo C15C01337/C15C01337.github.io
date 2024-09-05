@@ -115,18 +115,20 @@
         //   });
         // });
 
-        let deadlinesWithInfo = [
-          {
-            time: new Date("September 1, 2024 15:45:00"),
-            title: "Start of Blackhat MEA Quals CTF",
-            msg: "The event has started!"
-          },
-          {
-            time: new Date("September 2, 2024 15:45:00"),
-            title: "End of Blackhat MEA Quals CTF",
-            msg: "The event has ended!"
-          }
-        ];
+    let deadlinesWithInfo = [
+      {
+        // Start: Fri, 06 Sept. 2024, 21:45 NPT → Fri, 06 Sept. 2024, 16:00 UTC
+        time: new Date(Date.UTC(2024, 8, 6, 16, 0, 0)), 
+        title: "Start of CSAW CTF Qualification Round",
+        msg: "The event has started!"
+      },
+      {
+        // End: Sun, 08 Sept. 2024, 21:45 NPT → Sun, 08 Sept. 2024, 16:00 UTC
+        time: new Date(Date.UTC(2024, 8, 8, 16, 0, 0)), 
+        title: "End of CSAW CTF Qualification Round",
+        msg: "The event has ended!"
+      }
+    ];
 
         const getUITemplate = ({ title, days, hours, minutes, seconds, msg, isExpired }) => {
           if (isExpired) {
