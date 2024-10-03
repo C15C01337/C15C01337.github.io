@@ -118,18 +118,18 @@
     let deadlinesWithInfo = [
       {
         // Start: Fri, 06 Sept. 2024, 21:45 NPT → Fri, 06 Sept. 2024, 16:00 UTC
-        time: new Date(Date.UTC(2024, 8, 6, 16, 0, 0)), 
-        title: "Start of CSAW CTF Qualification Round",
+        time: new Date(Date.UTC(2024, 9, 5, 10, 0, 0)), 
+        title: "Start of BRICS+ CTF Quals",
         msg: "The event has started!"
       },
       {
         // End: Sun, 08 Sept. 2024, 21:45 NPT → Sun, 08 Sept. 2024, 16:00 UTC
-        time: new Date(Date.UTC(2024, 8, 8, 16, 0, 0)), 
-        title: "End of CSAW CTF Qualification Round",
+        time: new Date(Date.UTC(2024, 9, 6, 10, 0, 0)), 
+        title: "End of BRICS+ CTF Quals",
         msg: "The event has ended!"
       }
     ];
-
+          
         const getUITemplate = ({ title, days, hours, minutes, seconds, msg, isExpired }) => {
           if (isExpired) {
             return `
