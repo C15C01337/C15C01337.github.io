@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberDork Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-green: #0ecf3c;
+            --cyber-blue: #00f3ff;
+            --matrix-green: #20c20e;
+            --dark-bg: #0a0a0a;
+            --glow: 0 0 20px rgba(14, 207, 60, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--dark-bg);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .cyber-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cyber-header {
+            text-align: center;
+            margin: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            background: linear-gradient(45deg, var(--neon-green), var(--cyber-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--glow);
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        .cyber-sub {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            opacity: 0;
+            animation: fadeIn 1s 1s forwards;
+        }
+
+        .cyber-input-container {
+            position: relative;
+            max-width: 800px;
+            margin: 3rem auto;
+            perspective: 1000px;
+        }
+
+        .cyber-input {
+            width: 100%;
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-green);
+            border-radius: 5px;
+            color: var(--neon-green);
+            transition: all 0.3s ease;
+            box-shadow: var(--glow);
+        }
+
+        .cyber-input:focus {
+            outline: none;
+            transform: translateZ(20px);
+            box-shadow: 0 0 40px rgba(14, 207, 60, 0.5);
+        }
+
+        .cyber-list {
+            margin: 4rem 0;
+            display: grid;
+            gap: 2rem;
+        }
+
+        .cyber-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            position: relative;
+            cursor: pointer;
+            opacity: 0;
+            animation: itemEntry 0.5s forwards;
+        }
+
+        .cyber-item:hover {
+            background: rgba(14, 207, 60, 0.1);
+            border-color: var(--neon-green);
+            transform: translateY(-5px) rotateX(10deg);
+            box-shadow: var(--glow);
+        }
+
+        .cyber-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 10px;
+            background: linear-gradient(45deg, transparent 50%, rgba(14, 207, 60, 0.1));
+            pointer-events: none;
+        }
+
+        .dork-description {
+            color: var(--cyber-blue);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .dork-link {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .dork-link i {
+            color: var(--neon-green);
+            font-size: 1.5rem;
+        }
+
+        .cyber-section {
+            margin: 5rem 0;
+            padding: 3rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--cyber-blue);
+            border-radius: 15px;
+            position: relative;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: sectionEntry 0.5s 0.3s forwards;
+        }
+
+        #tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: var(--neon-green);
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--neon-green);
+            font-size: 0.9rem;
+            z-index: 1000;
+            max-width: 300px;
+            box-shadow: var(--glow);
+            display: none;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 20px rgba(14, 207, 60, 0.3); }
+            to { text-shadow: 0 0 40px rgba(14, 207, 60, 0.6); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes itemEntry {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes sectionEntry {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .cyber-social {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .cyber-social a {
+            color: #888;
+            text-decoration: none;
+            position: relative;
+            padding: 1rem 2rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .cyber-social a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--neon-green);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .cyber-social a:hover {
+            color: var(--neon-green);
+        }
+
+        .cyber-social a:hover::before {
+            transform: scaleX(1);
+        }
+
+        @media (max-width: 768px) {
+            .cyber-title {
+                font-size: 2.5rem;
+            }
+            
+            .cyber-input {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="matrix-rain"></canvas>
+
+    <div class="cyber-container">
+        <header class="cyber-header">
+            <h1 class="cyber-title">CYBERDORK ENGINE</h1>
+            <p class="cyber-sub">Advanced Query Generation System</p>
+        </header>
+
+        <div class="cyber-input-container">
+            <input type="text" class="cyber-input" id="domainInput" 
+                   placeholder="ENTER TARGET DOMAIN(S)" 
+                   oninput="updateDomain()">
+            <div id="tooltip">For multiple domains, separate by comma. e.g., example1.com, example2.com</div>
+        </div>
+
+        <ul class="cyber-list" id="dorkList"></ul>
+
+        <section class="cyber-section">
+            <h2 class="cyber-sub">OPERATIONAL DATABASES</h2>
+            <div class="cyber-list">
+                <div class="cyber-item">
+                    <a href="https://github.com/TakSec/google-dorks-bug-bounty/" target="_blank" class="dork-link">
+                        <i class="fas fa-database"></i>
+                        <span>Credit for: Google Dorks Database</span>
+                    </a>
+                </div>
+                <div class="cyber-item">
+                    <a href="https://thegrayarea.tech/5-google-dorks-every-hacker-needs-to-know-fed21022a906" target="_blank" class="dork-link">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Essential Dorks Protocol</span>
+                    </a>
+                </div>
+                <div class="cyber-item">
+                    <a href="https://infosecwriteups.com/uncover-hidden-gems-in-the-cloud-with-google-dorks-8621e56a329d" target="_blank" class="dork-link">
+                        <i class="fas fa-cloud"></i>
+                        <span>Cloud Reconnaissance</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Matrix Rain Effect
+        const canvas = document.querySelector('.matrix-rain');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+        const drops = Array(Math.floor(canvas.width/20)).fill(0);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#0ecf3c';
+            ctx.font = '15px monospace';
+
+            drops.forEach((drop, i) => {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * 20, drop * 20);
+                
+                if(drop * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+
+        setInterval(drawMatrix, 50);
+
+        // Original Functionality
+        const domainInput = document.getElementById('domainInput');
+        const tooltip = document.getElementById('tooltip');
+        let originalDorks = [];
+
+        domainInput.addEventListener('mouseover', function() {
+            tooltip.style.display = 'block';
+            tooltip.style.left = domainInput.offsetLeft + 'px';
+            tooltip.style.top = (domainInput.offsetTop + domainInput.offsetHeight + 5) + 'px';
+        });
+
+        domainInput.addEventListener('mouseout', function() {
+            tooltip.style.display = 'none';
+        });
+
+        async function fetchDorks() {
+            const url = "https://raw.githubusercontent.com/TakSec/google-dorks-bug-bounty/main/README.md";
+            const response = await fetch(url);
+            const text = await response.text();
+
+            const dorkList = document.getElementById("dorkList");
+            const regex = /(?:^### (.+)|```([^`]+)```)/gm;
+            let match;
+            let title = '';
+            let firstDork = true;
+
+            while ((match = regex.exec(text)) !== null) {
+                if (match[1]) {
+                    title = match[1];
+                } else if (match[2]) {
+                    const dork = match[2].trim();
+                    originalDorks.push(dork);
+                    const listItem = createDorkListItem(dork, title);
+                    dorkList.appendChild(listItem);
+                }
+            }
+            filterDorks();
+        }
+
+        function createDorkListItem(dork, description) {
+            const googleLink = `https://www.google.com/search?q=${encodeURIComponent(dork)}`;
+            const listItem = document.createElement("li");
+            listItem.className = 'cyber-item';
+
+            if (description) {
+                const desc = document.createElement("div");
+                desc.className = 'dork-description';
+                desc.textContent = description;
+                listItem.appendChild(desc);
+            }
+
+            const link = document.createElement("a");
+            link.href = googleLink;
+            link.className = 'dork-link';
+            link.target = "_blank";
+            link.innerHTML = `
+                <i class="fas fa-terminal"></i>
+                <span>${dork}</span>
+            `;
+
+            listItem.appendChild(link);
+            return listItem;
+        }
+
+        function updateDomain() {
+            const domains = domainInput.value.split(",").map(domain => domain.trim());
+            const dorkLinks = document.querySelectorAll(".dork-link span");
+            
+            dorkLinks.forEach((span, index) => {
+                let originalDork = originalDorks[index];
+                let updatedDork = originalDork;
+
+                if (domains.length > 0 && !originalDork.includes("Drupal")) {
+                    if (/site:"?example\[?\.\]?com"?/i.test(originalDork)) {
+                        const joinedDomains = domains.map(d => `site:${d}`).join(" | ");
+                        updatedDork = originalDork.replace(/site:"?example\[?\.\]?com"?/gi, joinedDomains);
+                    }
+                    else if (/["']example\[?\.\]?com["']/i.test(originalDork)) {
+                        const joinedDomains = domains.map(d => `"${d}"`).join(" | ");
+                        updatedDork = originalDork.replace(/["']example\[?\.\]?com["']/gi, joinedDomains);
+                    }
+                }
+                
+                span.textContent = updatedDork;
+                span.closest('a').href = `https://www.google.com/search?q=${encodeURIComponent(updatedDork)}`;
+            });
+        }
+
+        function filterDorks() {
+            document.querySelectorAll('.cyber-item').forEach(item => {
+                if (item.textContent.toLowerCase().includes("omit")) {
+                    item.style.display = "none";
+                }
+            });
+        }
+
+        // Initialize
+        fetchDorks();
+
+        // Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.cyber-item').forEach(item => {
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>

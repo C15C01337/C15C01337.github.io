@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberDork Generators</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
+
+        :root {
+            --neon-green: #0ecf3c;
+            --cyber-blue: #00f3ff;
+            --matrix-green: #20c20e;
+            --dark-bg: #0a0a0a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: 100vh;
+            background-color: var(--dark-bg);
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .title {
+            font-size: 4rem;
+            background: linear-gradient(45deg, var(--neon-green), var(--cyber-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 50px rgba(14, 207, 60, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            opacity: 0;
+            animation: fadeIn 1s 1s forwards;
+        }
+
+        .dorks-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 5rem;
+        }
+
+        .dork-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: cardEntry 0.5s forwards;
+        }
+
+        .dork-card:nth-child(1) { animation-delay: 0.2s; }
+        .dork-card:nth-child(2) { animation-delay: 0.4s; }
+        .dork-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .dork-card:hover {
+            background: rgba(14, 207, 60, 0.1);
+            border-color: var(--neon-green);
+            transform: translateY(-5px);
+            box-shadow: 0 0 40px rgba(14, 207, 60, 0.2);
+        }
+
+        .dork-card a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .dork-card i {
+            font-size: 2rem;
+            background: linear-gradient(45deg, var(--neon-green), var(--cyber-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes cardEntry {
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Particle animation */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--neon-green) 0%, rgba(14, 207, 60, 0) 70%);
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 2.5rem; }
+            .dorks-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="particles"></canvas>
+    
+    <div class="container">
+        <header class="header">
+            <h1 class="title">CyberDork Generators</h1>
+            <p class="subtitle">Advanced Dork Query Generators</p>
+        </header>
+
+        <div class="dorks-list">
+            <div class="dork-card">
+                <a href="./googledorks" target="_blank">
+                    <i class="fab fa-google"></i>
+                    <span>Google Dorks Generator</span>
+                </a>
+            </div>
+            
+            <div class="dork-card">
+                <a href="./gitdorks" target="_blank">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub Dorks Generator</span>
+                </a>
+            </div>
+
+            <div class="dork-card">
+                <a href="./shodandorks" target="_blank">
+                    <i class="fas fa-search"></i>
+                    <span>Shodan Dorks Generator</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Particle animation
+        const canvas = document.querySelector('.particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function createParticles() {
+            particles = [];
+            const numberOfParticles = Math.floor((canvas.width * canvas.height) / 15000);
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3 + 1,
+                    speedX: (Math.random() - 0.5) * 0.5,
+                    speedY: (Math.random() - 0.5) * 0.5,
+                    color: `rgba(14, 207, 60, ${Math.random() * 0.5})`
+                });
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+
+                if (particle.x > canvas.width) particle.x = 0;
+                if (particle.x < 0) particle.x = canvas.width;
+                if (particle.y > canvas.height) particle.y = 0;
+                if (particle.y < 0) particle.y = canvas.height;
+
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fillStyle = particle.color;
+                ctx.fill();
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        // Mouse interaction
+        document.addEventListener('mousemove', (e) => {
+            particles.forEach(particle => {
+                const dx = e.clientX - particle.x;
+                const dy = e.clientY - particle.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 100) {
+                    particle.x += dx * -0.01;
+                    particle.y += dy * -0.01;
+                }
+            });
+        });
+
+        // Initialize
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            createParticles();
+        });
+
+        resizeCanvas();
+        createParticles();
+        animateParticles();
+    </script>
+</body>
+</html>
