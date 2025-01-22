@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Security Mindmaps Hub</title>
+    <style>
+        :root {
+            --neon-green: #00ff9d;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Fira Code', monospace;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Cyberpunk-style header */
+        .header {
+            background: linear-gradient(45deg, #000000 0%, #001a00 100%);
+            padding: 1rem;
+            border-bottom: 2px solid var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Matrix-style navigation */
+        .sidebar {
+            background: rgba(10, 10, 10, 0.95);
+            padding: 2rem;
+            border-right: 1px solid var(--neon-green);
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .tree-nav {
+            list-style: none;
+            position: relative;
+        }
+
+        .tree-item {
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tree-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(0, 255, 157, 0.1) 50%, 
+                transparent 100%);
+            transition: left 0.5s;
+        }
+
+        .tree-item:hover::before {
+            left: 100%;
+        }
+
+        .tree-item.active {
+            background: rgba(0, 255, 157, 0.1);
+            color: var(--neon-green);
+        }
+
+        /* Holographic card effect */
+        .content {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            align-content: start;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 255, 157, 0.1);
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px solid var(--neon-green);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover::after {
+            opacity: 0.3;
+        }
+
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: #000;
+            transition: opacity 0.3s;
+        }
+
+        .card img.lazy {
+            opacity: 0.1;
+        }
+
+        .card img.loaded {
+            opacity: 1;
+        }
+
+        .card-info {
+            padding: 1.5rem;
+        }
+
+        .card h3 {
+            color: var(--neon-green);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Cyber glow effect */
+        .cyber-glows {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .glow {
+            position: absolute;
+            background: radial-gradient(circle at center, 
+                rgba(0, 255, 157, 0.1) 0%, 
+                transparent 70%);
+        }
+
+        /* Search bar */
+        .search-container {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                height: auto;
+                position: relative;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Cyber Security Mindmaps Hub</h1>
+    </header>
+
+    <div class="container">
+        <nav class="sidebar">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="SEARCH [...]" id="searchInput">
+            </div>
+            <ul class="tree-nav" id="directoryTree">
+                <!-- Directory structure will be generated by JavaScript -->
+            </ul>
+        </nav>
+
+        <main class="content" id="mainContent">
+            <!-- Cards will be populated by JavaScript -->
+        </main>
+    </div>
+
+    <script>
+        // Directory structure data
+    const directoryStructure = {
+    name: "root",
+    files: ["mind.png", "Privs Tools.png"],
+    children: [
+        {
+            name: "ActiveDirectory",
+            files: [
+                "Active Directory Pentesting.png",
+                "OSCP Practice Tools.png"
+            ]
+        },
+        {
+            name: "aircrack",
+            files: [
+                "Aircrack-ng UHD.png"
+            ]
+        },
+        {
+            name: "Burp Suite",
+            files: [
+                
+                "Burp Extensions UHD.png",
+                "Burpsuite.png",
+                "Burp Suite UHD.png"
+            ]
+        },
+        {
+            name: "Crackmapexec",
+            files: [
+                "crackmapexec",
+                "Crackmapexec UHD.png"
+            ]
+        },
+        {
+            name: "Empire",
+            files: [
+                "Empire Mindmap",
+                "Powershell Empire.png"
+            ]
+        },
+        {
+            name: "Enumeration",
+            files: [
+                
+                "SMB Enumeration.png",
+                "Web Directory Scanners.png",
+                "Wordlists Generator.png"
+            ]
+        },
+        {
+            name: "Feroxbuster",
+            files: [
+
+                "Feroxbuster UHD.png"
+            ]
+        },
+        {
+            name: "ffuf",
+            files: [
+
+                "FFUF UHD.png"
+            ]
+        },
+        {
+            name: "Firefox Pentest Addons",
+            files: [
+
+                "Firefox Pentest ADD-ONS UHD.png"
+            ]
+        },
+        {
+            name: "Github Dorks",
+            files: [
+
+                "Github Dorks UHD.png"
+            ]
+        },
+        {
+            name: "gobuster",
+            files: [
+
+                "gobuster UHD.png"
+            ]
+        },
+        {
+            name: "Google Search Operators",
+            files: [
+                "Google Search Operators UHD.png"
+            ],
+            children: [
+                {
+                    name: "Operators",
+                    files: []
+                }
+            ]
+        },
+        {
+            name: "Gtfobin",
+            files: [
+                "Capabilities Privilege Escalation UHD.png",
+            ]
+        },
+        {
+            name: "hashcat",
+            files: [
+                "Hashcat UHD.png"
+            ]
+        },
+        {
+            name: "HTB",
+            files: [
+                "HTB Cheat Sheet UHD.png"
+            ]
+        },
+        {
+            name: "httpx",
+            files: [
+                "HTTPX UHD.png"
+            ]
+        },
+        {
+            name: "hydra",
+            files: [
+                "hydra UHD.png"
+            ]
+        },
+        {
+            name: "IDAPro",
+            files: [
+                "IDAPro Cheatsheet UHD.png"
+            ]
+        },
+        {
+            name: "Impacket",
+            files: [
+                "impacket UHD.png"
+            ]
+        },
+        {
+            name: "ISO Control",
+            files: [
+                "ISO 27001-2022 Controls UHD.png"
+            ]
+        },
+        {
+            name: "John",
+            files: [
+                "John UHD.png"
+            ]
+        },
+        {
+            name: "medusa",
+            files: [
+                "medusa UHD.png"
+            ]
+        },
+        {
+            name: "Metasploit",
+            files: [
+                "metasploit",
+                "Metasploit Framework UHD.png",
+                "Meterpreter Android UHD.png",
+                "Windows Meterpreter UHD.png"
+            ]
+        },
+        {
+            name: "Mimikatz",
+            files: [
+                "mimikatz",
+                "Mimikatz UHD.png"
+            ]
+        },
+        {
+            name: "Mitre Attack",
+            files: [
+                "ATTCK Matrix UHD.png",
+                "Cloud Matrix UHD.png",
+                "Command and Control UHD.png",
+                "Containers Matrix UHD.png",
+                "Credential Access UHD.png",
+                "Defend Mitre UHD.png",
+                "Defense Evasion UHD.png",
+                "Linux Matrix UHD.png",
+                "macOS Matrix UHD.png",
+                "mitre",
+                "Mobile Tactics UHD.png",
+                "Network Matrix UHD.png",
+                "Windows Matrix UHD.png"
+            ]
+        },
+        {
+            name: "nist",
+            files: [
+                "nist",
+                "NIST CyberSecurity Framework UHD.png"
+            ]
+        },
+        {
+            name: "Nmap",
+            files: [
+                "nmap",
+                "nmap UHD.png"
+            ]
+        },
+        {
+            name: "Offensivesecurity-Checklists",
+            files: [
+                "Adversary Emulation Campaign Hint.pdf",
+                "APITESTINGchecklist.png",
+                "BASIC SCADA SHODAN DORK.pdf",
+                "Binary exploitation checklist.png",
+                "Blockchain and Smart Contract Testing Security.pdf",
+                "EDR TESTING.png",
+                "FIREWALL TESTING CHECKLIST.png",
+                "INSECURE DESERIALIZATION CHECKLIST.png",
+                "Memory Corruption Checklist.png",
+                "OT PENTEST CHECKLIST.png",
+                "SCADA SHODAN DORK.png",
+                "SSO Security Testing Checklist.png",
+                "Web PenTesting Checklist by Joas.pdf"
+            ]
+        },
+        {
+            name: "OSINT",
+            files: [
+                "Privacy Email Accounts.png",
+                "privacy Search Engine.png"
+            ],
+            children: [
+                {
+                    name: "Privacy Tools",
+                    files: ["Privacy Tools UHD.png"]
+                }
+            ]
+        },
+        {
+            name: "Owasp",
+            files: [
+                "OWASP Mobile UHD.png",
+                "OWASP Testing Checklist UHD.png",
+                "OWASP Web UHD.png"
+            ]
+        },
+        {
+            name: "Red-Team-Pentesting-Mind-Map",
+            files: [
+                "1.4 Penetration Testing.xmind",
+                "Android Application Penetration Testing Checklist.xmind",
+                "LICENSE",
+                "OSCP Guide.xmind",
+                "Pentesting_Active_directory.xmind",
+                "Professional Pentesting.xmind",
+                "README.md"
+            ],
+            children: [
+                {
+                    name: "Red-Teaming",
+                    files: ["RT-V1.xmind"]
+                },
+                {
+                    name: "Web-Penetration Testing",
+                    files: ["PT-V1.3.1.xmind"]
+                }
+            ]
+        },
+        {
+            name: "Serach Engine for Pentester",
+            files: ["Search Engine for Pentester UHD.png"]
+        },
+        {
+            name: "Shodan",
+            files: [
+                "Shodan UHD.png"
+            ]
+        },
+        {
+            name: "Sqlmap",
+            files: [
+                "Sqlmap UHD.png"
+            ]
+        },
+        {
+            name: "Tcpdump",
+            files: [
+                "tcpdump UHD.png"
+            ]
+        },
+        {
+            name: "Tools",
+            files: [
+                "Bug Bounty Tools UHD.png",
+                "Penetration Testing Tools UHD.png",
+                "Red Team & Blue Team Tools UHD.png",
+                "tools"
+            ]
+        },
+        {
+            name: "TryHackMe",
+            files: [
+                "Tryhackme UHD.png"
+            ]
+        },
+        {
+            name: "Vulnhub",
+            files: [
+                "Vulnhub Privs Cheatsheet UHD.png"
+            ]
+        },
+        {
+            name: "wfuzz",
+            files: [
+                "WFUZZ UHD.png"
+            ]
+        },
+        {
+            name: "Windows Privileges",
+            files: [
+                "Windows Privileges UHD.png"
+            ]
+        },
+        {
+            name: "Wireshark",
+            files: [
+                "Wireshark Display Filter UHD.png",
+                "Wireshark UHD.png"
+            ]
+        },
+        {
+            name: "wpscan",
+            files: [
+                "wpscan UHD.png"
+            ]
+        }
+    ]
+};
+        // Generate directory tree
+        const treeNav = document.getElementById('directoryTree');
+        
+        function generateTree(node, parentElement, depth = 0) {
+            const li = document.createElement('li');
+            li.className = 'tree-item';
+            li.style.paddingLeft = `${depth * 20}px`;
+            li.textContent = node.name;
+            
+            if (node.children) {
+                li.classList.add('has-children');
+                const ul = document.createElement('ul');
+                node.children.forEach(child => {
+                    generateTree(child, ul, depth + 1);
+                });
+                li.appendChild(ul);
+            }
+            
+            parentElement.appendChild(li);
+        }
+
+        // Generate cards
+        const mainContent = document.getElementById('mainContent');
+
+        function createCard(dirName, fileName) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.setAttribute('data-directory', dirName);
+            card.setAttribute('data-filename', fileName);
+
+            const img = document.createElement('img');
+            img.className = 'lazy';
+            img.setAttribute('data-src', `${dirName}/${fileName}`);
+            img.setAttribute('alt', fileName);
+            img.loading = 'lazy';
+
+            const cardInfo = document.createElement('div');
+            cardInfo.className = 'card-info';
+            cardInfo.innerHTML = `
+                <h3>${fileName.replace('.png', '')}</h3>
+                <p>Directory: ${dirName}</p>
+            `;
+
+            card.appendChild(img);
+            card.appendChild(cardInfo);
+            mainContent.appendChild(card);
+        }
+
+        // Populate content
+        directoryStructure.children.forEach(dir => {
+            dir.files.forEach(file => {
+                createCard(dir.name, file);
+            });
+        });
+
+        // Lazy loading
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.classList.add('loaded');
+                    observer.unobserve(img);
+                }
+            });
+        });
+
+        document.querySelectorAll('.lazy').forEach(img => {
+            observer.observe(img);
+        });
+
+        // Filter functionality
+        function filterContent(searchTerm = '', directory = '') {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                const matchesSearch = card.querySelector('h3').textContent.toLowerCase().includes(searchTerm.toLowerCase());
+                const matchesDirectory = directory === '' || card.dataset.directory === directory;
+                
+                card.style.display = (matchesSearch && matchesDirectory) ? 'block' : 'none';
+            });
+        }
+
+        // Event listeners
+        document.querySelectorAll('.tree-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.tree-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                filterContent('', item.textContent.trim());
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            filterContent(e.target.value);
+        });
+
+        // Initial filter
+        filterContent();
+    </script>
+</body>
+</html>
