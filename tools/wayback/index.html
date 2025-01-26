@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEURAL SCAN // WEB ARCHIVE</title>
+    <style>
+        :root {
+            --neon-green: #0f0;
+            --neon-blue: #0ff;
+            --dark-bg: #000;
+            --hacker-font: 'Courier New', monospace;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--dark-bg);
+            color: var(--neon-green);
+            font-family: var(--hacker-font);
+            overflow-x: hidden;
+        }
+
+        /* Matrix rain background */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .cyber-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            border: 3px solid var(--neon-green);
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.2);
+            padding: 2rem;
+            position: relative;
+            background: 
+                linear-gradient(45deg, 
+                    transparent 48%, 
+                    rgba(0, 255, 0, 0.05) 50%, 
+                    transparent 52%),
+                radial-gradient(circle at center, rgba(0, 255, 0, 0.1) 0%, transparent 70%);
+        }
+
+        .glitch-title {
+            text-align: center;
+            font-size: 3rem;
+            text-shadow: 0 0 20px var(--neon-green);
+            position: relative;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(
+                0deg,
+                rgba(0, 255, 0, 0) 0%,
+                rgba(0, 255, 0, 0.3) 50%,
+                rgba(0, 255, 0, 0) 100%
+            );
+            animation: scan 5s infinite;
+        }
+
+        @keyframes scan {
+            0% { top: -50px }
+            100% { top: 100% }
+        }
+
+        .cyber-input {
+            background: transparent;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 1rem;
+            font-size: 1.5rem;
+            width: 100%;
+            margin: 2rem 0;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .cyber-input:focus {
+            outline: none;
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.4);
+        }
+
+        .hud-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .hud-panel {
+            border: 2px solid var(--neon-blue);
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hud-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                var(--neon-blue),
+                var(--neon-green),
+                var(--neon-blue)
+            );
+            animation: rotate 10s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg) }
+        }
+
+        .cyber-button {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .cyber-button:hover {
+            background: rgba(0, 255, 0, 0.3);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.4);
+        }
+
+        .toggle-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+
+        .cube {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            animation: cubeRotate 20s infinite linear;
+            opacity: 0.1;
+        }
+
+        @keyframes cubeRotate {
+            100% { transform: rotateY(360deg) rotateX(720deg) }
+        }
+
+        .cyber-console {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--neon-green);
+            padding: 1rem;
+            height: 200px;
+            overflow-y: auto;
+            font-family: var(--hacker-font);
+            color: var(--neon-green);
+        }
+
+        .cyber-console::before {
+            content: '> ';
+            color: var(--neon-green);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <div class="scan-line"></div>
+    
+    <div class="toggle-switch">
+        <label class="cyber-button">
+            <input type="checkbox" id="cyberMode" style="display: none">
+            CYBER MODE
+        </label>
+    </div>
+
+    <div class="cyber-container">
+        <h1 class="glitch-title">// WEB ARCHIVE TERMINAL //</h1>
+        
+        <input type="text" 
+               class="cyber-input" 
+               id="target" 
+               placeholder="ENTER TARGET DOMAIN"
+               spellcheck="false">
+
+        <div class="hud-grid">
+            <div class="hud-panel">
+                <h3>SCAN MODES</h3>
+                <button class="cyber-button" onclick="initiateScan('wildcard')">WILDCARD SCAN</button>
+                <button class="cyber-button" onclick="initiateScan('deep')">DEEP SCAN</button>
+                <button class="cyber-button" onclick="initiateScan('stealth')">STEALTH SCAN</button>
+            </div>
+
+            <div class="hud-panel">
+                <h3>ANALYSIS TOOLS</h3>
+                <button class="cyber-button" onclick="runTool('temporal')">TEMPORAL MAP</button>
+                <button class="cyber-button" onclick="runTool('quantum')">QUANTUM INDEX</button>
+                <button class="cyber-button" onclick="runTool('neural')">NEURAL ARCHIVE</button>
+            </div>
+        </div>
+
+        <div class="hud-panel" id="output">
+            <h3>SYSTEM OUTPUT</h3>
+            <div id="console" class="cyber-console"></div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix rain effect
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+        const drops = Array(Math.floor(canvas.width/10)).fill(0);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#0F0';
+            ctx.font = '15px monospace';
+
+            drops.forEach((drop, i) => {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * 10, drop * 10);
+                
+                if (drop * 10 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+
+        setInterval(drawMatrix, 50);
+
+        // Cyber mode toggle
+        document.getElementById('cyberMode').addEventListener('change', (e) => {
+            document.body.classList.toggle('cyber-active', e.target.checked);
+            document.querySelectorAll('.cube').forEach(cube => {
+                cube.style.animation = e.target.checked ? 'cubeRotate 20s infinite linear' : 'none';
+            });
+        });
+
+        // Terminal functions
+        function logToConsole(message) {
+            const console = document.getElementById('console');
+            console.innerHTML += `> ${message}<br>`;
+            console.scrollTop = console.scrollHeight;
+        }
+
+        function initiateScan(type) {
+            const target = document.getElementById('target').value;
+            if (!target) {
+                logToConsole("ERROR: NO TARGET SPECIFIED");
+                return;
+            }
+
+            let url = `https://web.archive.org/cdx/search/cdx?url=${encodeURIComponent(target)}&fl=original&collapse=urlkey&output=json`;
+            
+            if (type === 'wildcard') {
+                url = `https://web.archive.org/cdx/search/cdx?url=*.${target}/*&fl=original&collapse=urlkey&output=json`;
+            } else if (type === 'deep') {
+                url = `https://web.archive.org/cdx/search/cdx?url=${encodeURIComponent(target)}/*&fl=original&collapse=urlkey&output=json`;
+            } else if (type === 'stealth') {
+                url = `https://web.archive.org/cdx/search/cdx?url=${encodeURIComponent(target)}&fl=original&collapse=urlkey&output=json&filter=statuscode:200`;
+            }
+
+            logToConsole(`INITIATING ${type.toUpperCase()} SCAN ON: ${target}`);
+            logToConsole(`ACCESSING: ${url}`);
+            window.open(url, '_blank');
+        }
+
+        function runTool(tool) {
+            const target = document.getElementById('target').value;
+            if (!target) {
+                logToConsole("ERROR: NO TARGET SPECIFIED");
+                return;
+            }
+
+            let url = `https://web.archive.org/web/*/${target}`;
+            
+            if (tool === 'temporal') {
+                url = `https://web.archive.org/web/*/${target}/*`;
+            } else if (tool === 'quantum') {
+                url = `https://web.archive.org/cdx/search/cdx?url=${encodeURIComponent(target)}&output=json`;
+            } else if (tool === 'neural') {
+                url = `https://web.archive.org/web/${target}/*`;
+            }
+
+            logToConsole(`EXECUTING ${tool.toUpperCase()} ANALYSIS PROTOCOL`);
+            logToConsole(`ACCESSING: ${url}`);
+            window.open(url, '_blank');
+        }
+
+        // Add random cubes
+        for (let i = 0; i < 5; i++) {
+            const cube = document.createElement('div');
+            cube.className = 'cube';
+            cube.style.left = `${Math.random() * 100}%`;
+            cube.style.top = `${Math.random() * 100}%`;
+            cube.style.animationDelay = `${Math.random() * 20}s`;
+            document.body.appendChild(cube);
+        }
+    </script>
+</body>
+</html>
