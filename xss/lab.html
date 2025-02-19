@@ -126,40 +126,49 @@
         <div id="attackResults"></div>
     </div>
 
-    <script>
-        // Mock alert function to prevent actual popups
-        window.alert = (msg) => {
-            document.getElementById('attackResults').innerHTML += 
-                `<div class="alert-unsafe">XSS Triggered: ${msg}</div>`;
-        };
+<script>
+    
+    // Wrap alert to log and trigger real alerts
+    window.realAlert = window.alert;
+    window.alert = (msg) => {
+    document.getElementById('attackResults').innerHTML += 
+        `<div class="alert-unsafe">XSS Triggered: ${msg}</div>`;
+    realAlert(msg); // Trigger actual alert
+};
 
-        function testXSS(scenario) {
-            const input = document.getElementById(`input${scenario}`).value;
-            let output;
-            
-            switch(scenario) {
-                case 1:
-                    output = document.getElementById('output1');
-                    output.innerHTML = input;
-                    break;
-                case 2:
-                    output = document.getElementById('output2');
-                    output.innerHTML = DOMPurify.sanitize(input);
-                    break;
-                case 3:
-                    const link = document.getElementById('output3');
-                    link.href = input;
-                    break;
-                case 4:
-                    try {
-                        eval(input);
-                    } catch(e) {
-                        document.getElementById('attackResults').innerHTML += 
-                            `<div class="alert-unsafe">Error: ${e.message}</div>`;
-                    }
-                    break;
+
+function testXSS(scenario) {
+    const input = document.getElementById(`input${scenario}`).value;
+    let output;
+
+    switch (scenario) {
+        case 1:  // Scenario 1: InnerHTML Injection (Vulnerable)
+            output = document.getElementById('output1');
+            output.innerHTML = input; // Direct injection (XSS)
+            break;
+
+        case 2:  // Scenario 2: DOMPurify Protection (Safe)
+            output = document.getElementById('output2');
+            output.innerHTML = DOMPurify.sanitize(input); // XSS blocked
+            break;
+
+        case 3:  // Scenario 3: Href Attribute Injection (Vulnerable)
+            const link = document.getElementById('output3');
+            link.href = input; // Allows JavaScript URLs (XSS)
+            link.innerText = "Click me"; 
+            break;
+
+        case 4:  // Scenario 4: Eval Execution (Vulnerable)
+            try {
+                eval(input); // Executes arbitrary JavaScript (XSS)
+            } catch (e) {
+                document.getElementById('attackResults').innerHTML += 
+                    `<div class="alert-unsafe">Error: ${e.message}</div>`;
             }
-        }
-    </script>
+            break;
+    }
+}
+
+</script>
 </body>
 </html>
