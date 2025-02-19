@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS Playground</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js"></script>
+    <style>
+        :root {
+            --safe: #4CAF50;
+            --unsafe: #f44336;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .vulnerable {
+            border-left: 5px solid var(--unsafe);
+        }
+        .secure {
+            border-left: 5px solid var(--safe);
+        }
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+        }
+        button {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+        .output {
+            margin-top: 10px;
+            padding: 10px;
+            min-height: 50px;
+            background-color: #fff9c4;
+        }
+        .cheat-sheet {
+            background: #fff3e0;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .alert-safe {
+            color: var(--safe);
+            padding: 10px;
+        }
+        .alert-unsafe {
+            color: var(--unsafe);
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>XSS Practice Playground</h1>
+    
+    <div class="cheat-sheet">
+        <h3>XSS Cheat Sheet</h3>
+        <ul>
+            <li><code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+            <li><code>&lt;img src=x onerror=alert(1)&gt;</code></li>
+            <li><code>&lt;svg onload=alert(1)&gt;</code></li>
+            <li><code>javascript:alert(1)</code></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <!-- Scenario 1: Basic InnerHTML Injection -->
+        <div class="card vulnerable">
+            <h3>Vulnerable InnerHTML</h3>
+            <input type="text" id="input1" placeholder="Enter payload">
+            <button onclick="testXSS(1)">Test</button>
+            <div class="output" id="output1"></div>
+            <div class="alert-unsafe">This is vulnerable! ⚠️</div>
+        </div>
+
+        <!-- Scenario 2: DOMPurify Protected -->
+        <div class="card secure">
+            <h3>DOMPurify Sanitized</h3>
+            <input type="text" id="input2" placeholder="Enter payload">
+            <button onclick="testXSS(2)">Test</button>
+            <div class="output" id="output2"></div>
+            <div class="alert-safe">Protected by DOMPurify 🛡️</div>
+        </div>
+
+        <!-- Scenario 3: URL Attribute Injection -->
+        <div class="card vulnerable">
+            <h3>Href Attribute</h3>
+            <input type="text" id="input3" placeholder="Enter URL">
+            <button onclick="testXSS(3)">Test</button>
+            <div class="output">
+                <a id="output3" href="#">Click me</a>
+            </div>
+            <div class="alert-unsafe">Vulnerable to javascript: URLs ⚠️</div>
+        </div>
+
+        <!-- Scenario 4: Eval Execution -->
+        <div class="card vulnerable">
+            <h3>Eval Execution</h3>
+            <input type="text" id="input4" placeholder="Enter JavaScript">
+            <button onclick="testXSS(4)">Test</button>
+            <div class="output" id="output4"></div>
+            <div class="alert-unsafe">Direct eval() execution ⚠️</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Attack Results</h3>
+        <div id="attackResults"></div>
+    </div>
+
+    <script>
+        // Mock alert function to prevent actual popups
+        window.alert = (msg) => {
+            document.getElementById('attackResults').innerHTML += 
+                `<div class="alert-unsafe">XSS Triggered: ${msg}</div>`;
+        };
+
+        function testXSS(scenario) {
+            const input = document.getElementById(`input${scenario}`).value;
+            let output;
+            
+            switch(scenario) {
+                case 1:
+                    output = document.getElementById('output1');
+                    output.innerHTML = input;
+                    break;
+                case 2:
+                    output = document.getElementById('output2');
+                    output.innerHTML = DOMPurify.sanitize(input);
+                    break;
+                case 3:
+                    const link = document.getElementById('output3');
+                    link.href = input;
+                    break;
+                case 4:
+                    try {
+                        eval(input);
+                    } catch(e) {
+                        document.getElementById('attackResults').innerHTML += 
+                            `<div class="alert-unsafe">Error: ${e.message}</div>`;
+                    }
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
